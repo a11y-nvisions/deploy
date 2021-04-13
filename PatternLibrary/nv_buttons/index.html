@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script defer src="customButton.v1.js"></script>
+  <style>
+    :root{
+      --font-color:black;
+      --body-background:white;
+    }
+    *{margin:0;padding:0;
+      box-sizing:border-box;}
+      
+    html,body{
+      background-color: var(--body-background);
+      color:var(--font-color);
+    }
+
+    body.prevent-transition *{
+      transition:none;
+      -o-transition:none;
+      -moz-transition:none;
+      -ms-transition:none;
+      -webkit-transition:none;
+    }
+
+    [role=button]{
+      text-decoration: none;
+      color:inherit;
+      background-color:inherit;
+      border:solid 1px;
+      cursor:default;
+      position: relative;
+    }
+
+    [aria-disabled="true"]{
+      opacity:0.65;
+      pointer-events: none;
+    }
+
+    #test_acc{
+      width:35vw;
+      overflow:hidden;
+      margin:1em;
+
+      flex-flow: column;
+    }
+
+    #test_acc [role=button]{
+      display: block;
+      z-index:99;
+      background-color:#21315f;
+      transition:background-color 0.3s;
+    }
+    #test_acc [role=button]:focus{
+      outline:none;
+      background-color:#21418f;
+    }
+
+    [role=button]{text-align: center;}
+
+    #testCont{
+      position: relative;
+      top:0; z-index:0;
+      padding:0.5em;
+      background-color:#21315f;
+      height:25vh;
+      border:solid 1px;
+      box-shadow: inset 0 -2px 5px 3px #000;
+      visibility: visible;
+      transition:
+      top 0.3s,
+      opacity 0.2s,
+      visibility 0.3s,
+      box-shadow 0.5s;
+    }
+
+    #testCont.collapsed{
+      opacity: 0;
+      top:-100vh;
+      z-index:0;
+      margin:-1px;
+      overflow: hidden;
+      visibility: hidden;
+      box-shadow: inset 0 -2px 5px 5px #000;
+    }
+
+    @media (prefers-color-scheme:dark){
+      :root{
+        --font-color:white;
+        --body-background:black;
+      }
+    }
+  </style>
+  <script defer>
+    window.addEventListener('DOMContentLoaded',function(){
+      setTimeout(function(){
+        document.body.classList.remove('prevent-transition');
+      })
+    },100);
+  </script>
+</head>
+<body class="prevent-transition">
+  <div id="test_acc" class="accordion_wrapper">
+    <a id="button-a-available" href="#" role="button"
+    data-contentExpandable="true"
+    aria-controls="testCont"
+    aria-expanded="true">Accordion</a>
+    <div id="testCont">
+      <p>You might make the role = "button"</p>
+      <span role="button">Normal button</span>
+
+      <span role="button" aria-disabled="true">Normal button(disabled)</span>
+    </div>
+  </div>
+</body>
+</html>
