@@ -1,0 +1,9 @@
+*-temp.*
+/temp
+*.temp
+*.zip
+*.alz
+*.7z
+*.rar
+*.tar
+/node_modules
