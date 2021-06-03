@@ -1,0 +1,57 @@
+:root{
+  --fg:#000000;
+  --bg:#ffffff;
+}
+
+nv-checkbox,[is$="checkbox"]{
+  border:solid 0.1em var(--fg);
+  color:var(--fg);
+  background: var(--bg);
+}
+
+.theme-color{
+  &[class$="mono-invert"]{
+    --themeBG:var(--fg);
+    --themeFG:var(--bg);
+    --themeBFG:var(--fg);
+  }
+
+  &[class$="mincho"]{
+    --themeBG:#99ffd0;
+    --themeFG:#1d100d;
+    --themeBFG:#3d977d;
+  }
+
+  &:not(nv-checkbox) nv-checkbox,
+  &:not([is$="checkbox"]) [is$="checkbox"]{
+    border-color: var(--themeBFG);
+    color:var(--themeFG);
+    background: var(--themeBG);
+  }
+
+  &:is(nv-checkbox),
+  &:is([is$="checkbox"]){
+    border-color:solid 0.05em var(--themeBG);
+    color:var(--themeFG);
+    background: var(--themeBFG);
+  }
+}
+
+body.forced-scheme{
+  &.light{
+    --fg:#000000;
+    --bg:#ffffff;
+  }
+  &.dark{
+    --fg:#ffffff;
+    --bg:#000000;
+  }
+}
+
+@media screen and (prefers-color-scheme:dark) {
+  :root{
+    --fg:#000;
+    --bg:#fff;
+  }
+  
+}

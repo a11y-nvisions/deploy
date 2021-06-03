@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkbox Samples</title>
+  <script defer src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+  <script defer src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script defer src="./dist/customCheckbox.js"></script>
+  <style>
+    *{
+      margin:0; padding:0;
+      box-sizing: border-box;
+    }
+    </style>
+</head>
+<body>
+  <h1>Samples</h1>
+  <div>
+    <h2>The group where partially checked checkboxes</h2>
+    <nv-checkbox id="general-master" aria-controls="chkg1"></nv-checkbox>
+    <nv-label for="general-master">Master Checkbox - General(Square(Normal) Shape)</nv-label>
+    <div id="chkg1">
+      <nv-checkbox id="general-child1" checked class="round"></nv-checkbox>
+      <nv-label for="general-child1">Child1 - General - General(Round Shape)</nv-label>
+      <nv-checkbox id="general-child2" class="round-square"></nv-checkbox>
+      <nv-label for="general-child2">Child2 - General(Rounded Square Shape)</nv-label>
+    </div>
+  </div>
+  <div class="theme-color mono-invert">
+    <h2>The Group where all checkboxes is checked</h2>
+    <nv-checkbox checked id="invert-master" aria-controls="chkg2"></nv-checkbox>
+    <nv-label for="invert-master">Master Checkbox - mono inverted Color Design(Square(Normal) Shape)</nv-label>
+    <div id="chkg2">
+      <nv-checkbox id="invert-child1" class="round"></nv-checkbox>
+      <nv-label for="invert-child1">Child 1 - mono inverted Color Design(Round Shape)</nv-label>
+      <nv-checkbox id="invert-child2" class="round-square"></nv-checkbox>
+      <nv-label for="invert-child2">Child 2 - mono inverted Color Design(Rounded Square Shape)</nv-label>
+    </div>
+  </div>
+  <div class="theme-color mincho">
+    <h2>The Group where all checkboxes is not checked</h2>
+    <nv-checkbox id="mincho-master" aria-controls="chkg3"></nv-checkbox>
+    <nv-label for="mincho-master">Master Checkbox - Mint Chocolate Color Design(Square(Normal) Shape)</nv-label>
+    <div id="chkg3">
+      <nv-checkbox id="mincho-child1" class="round"></nv-checkbox>
+      <nv-label for="mincho-child1">Child 1 - Mint Chocolate Color Design(Round Shape)</nv-label>
+      <nv-checkbox id="mincho-child2" class="round-square"></nv-checkbox>
+      <nv-label for="mincho-child2">Child 2 - Mint Chocolate Color Design(Rounded Square Shape)</nv-label>
+    </div>
+  </div>
+  <h2>A method of the markup without using the &lt;nv-checkbox&gt; on your HTML</h2>
+  
+  <p>You can use this custom checkboxes putting a keyword in the "is" attribute on element that specified by author.</p>
+  <p>The next checkboxes are the case of Overriding at the specified tags.</p>
+
+  <p is="nv-p-checkbox" id="ParagraphCheckbox"></p>
+  <nv-label for="ParagraphCheckbox">Paragraph Tag Checkbox</nv-label>
+  <p>This checkbox was created using the "p" tag that's with the "is" attribute that was used "nv-p-checkbox" keyword.</p>
+
+  <div is="nv-div-checkbox" id="DIVCheckbox"></div>
+  <nv-label for="DIVCheckbox">DIV Tag Checkboxes</nv-label>
+  <p>This checkbox was created using the "div" tag that's with the "is" attribute that was used "nv-div-checkbox" keyword.</p>
+
+  <span is="nv-span-checkbox" id="SpanCheckbox"></span>
+  <nv-label for="SpanCheckbox">Span Tag Checkboxes</nv-label>
+  <p>This checkbox was created using the "span" tag that's with the "is" attribute that was used "nv-span-checkbox" keyword.</p>
+
+  <a is="nv-a-checkbox" id="hrefWarningTest1"></a>
+  <nv-label for="hrefWarningTest1">Anchor Tag Checkbox without href(the warning won't be shown on console) [Correct Usage]</nv-label>
+  <p>This checkbox was created using the "a" tag that's with the "is" attribute that was used "nv-a-checkbox" keyword.</p>
+
+  <a is="nv-a-checkbox" id="hrefWarningTest2" href="#"></a>
+  <nv-label for="hrefWarningTest2">Anchor Tag Checkbox with href(the warning will be shown on console) [Incorrect Usage]</nv-label>
+
+  <p>This checkbox was created using the "a" tag that's with the "is" attribute that was used "nv-a-checkbox" keyword.</p>
+  <p>The nv-a-tag checkbox is limited the using of the "href" attribute, because href tag give the focus.</p>
+
+  <h3>Disabled Checkboxes</h3>
+  <div>
+    <nv-checkbox disabled id="notClickable1"></nv-checkbox>
+    <nv-label for="notClickable1">You don't click to check it (The &lt;nv-checkbox&gt; tag)</nv-label>
+  </div>
+  <div>
+    <a disabled is="nv-a-checkbox" id="notClickable2"></a>
+    <nv-label for="notClickable2">You don't click to check it ("a" tag with the is=&ldquo;nv-a-checkbox&rdquo; Attribute)</nv-label>
+  </div>
+
+  <div>
+    <div>
+      <h3>The disabled appearance of each checkbox themes</h3>
+      <nv-checkbox disabled checked id="general_disabled"></nv-checkbox>
+      <nv-label for="general_disabled">General(default) Theme Disabled Sample</nv-label>
+    </div>
+    <div class="theme-color mono-invert">
+      <nv-checkbox disabled checked id="invert_disabled"></nv-checkbox>
+      <nv-label for="invert_disabled">Inverted Theme Disabled Sample</nv-label>
+    </div>
+    <div class="theme-color mincho">
+      <nv-checkbox disabled checked id="mincho_disabled"></nv-checkbox>
+      <nv-label for="mincho_disabled">Mincho Color Theme Disabled Sample</nv-label>
+    </div>
+    
+  </div>
+</body>
+</html>
