@@ -43,6 +43,35 @@ const ControlableMixin = base => class extends base {
   }
 }
 
+const SwitchableMixin = base => class extends base{
+  setInitializeSwitchableButton () {
+    if( this.isSwitchableButton ){
+      this.pressed = this.pressed;
+      this.element.addEventListener('click',function(){
+        this.togglePressedState();
+      }.bind(this));
+    }
+  }
+
+  get isSwitchableButton(){
+    return this.element.dataset.setSwitchable !== null;
+  }
+  
+  get pressed () {
+    this.element.getAttribute('aria-pressed') === 'true';
+  }
+
+  set pressed (v) {
+    if( this.isSwitchableButton ) {
+      this.element.setAttribute('aria-pressed',v);
+    }
+  }
+
+  togglePressedState(){
+    this.pressed = !this.pressed;
+  }
+}
+
 const ExpandableMixin = base => class extends base{
   setInitializeContentExpandableButton(){
     if(this.isContentExpandableButton){
@@ -157,12 +186,14 @@ class CustomControl {
 class CustomButton extends compose(
   ControlableMixin,
   DoubleClickUnselectableMixin,
-  ExpandableMixin
+  ExpandableMixin,
+  SwitchableMixin
 )(CustomControl) {
   constructor(_element){
     super(_element);
     this.disabled = this.disabled;
     this.setInitializeContentExpandableButton();
+    this.setInitializeSwitchableButton();
     this.PreventTextSelection();
     this.element.addEventListener('keydown',CustomButton.keyClickHandler);
 
