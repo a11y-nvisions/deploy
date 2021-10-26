@@ -54,11 +54,11 @@ const SwitchableMixin = base => class extends base{
   }
 
   get isSwitchableButton(){
-    return this.element.dataset.setSwitchable !== null;
+    return this.element.dataset.buttonRole === 'switch';
   }
   
   get pressed () {
-    this.element.getAttribute('aria-pressed') === 'true';
+    return this.element.getAttribute('aria-pressed') === 'true';
   }
 
   set pressed (v) {
@@ -83,7 +83,7 @@ const ExpandableMixin = base => class extends base{
   }
 
   get isContentExpandableButton(){
-    return this.element.getAttribute('data-contentExpandable') == "true" ? true : false;
+    return this.element.dataset.buttonRole === 'accordion';
   }
 
   set setCollapsedContainerHTMLClass(v){
@@ -196,6 +196,7 @@ class CustomButton extends compose(
     this.setInitializeSwitchableButton();
     this.PreventTextSelection();
     this.element.addEventListener('keydown',CustomButton.keyClickHandler);
+    this.element.isCustomButton = true;
 
   }
   

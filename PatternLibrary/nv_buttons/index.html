@@ -107,7 +107,7 @@
 <body class="prevent-transition">
   <div id="test_acc" class="accordion_wrapper">
     <a id="button-a-available" href="#" role="button"
-    data-contentExpandable="true"
+    data-button-role = "accordion"
     aria-controls="testCont"
     aria-expanded="true">Accordion</a>
     <div id="testCont">
@@ -116,7 +116,11 @@
 
       <span role="button" aria-disabled="true">Normal button(disabled)</span>
       <span role="button"
-      data-set-switchable>Switch button</span>
+      data-button-role = "switch">Switch button</span>
+
+      <div id="DivTest">DIV Button Test</div>
+      <div id="SpanTest">Span Button Test</div>
+      <div id="AnchorTest">Anchor Button Test</div>
     </div>
   </div>
 </body>
