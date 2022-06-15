@@ -208,7 +208,7 @@ class CustomButton extends compose(
         ${executions}
       }`;
 
-      this.element.addEventListener('click',);
+      this.element.addEventListener('click',handler);
     }
   }
 
