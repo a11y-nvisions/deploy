@@ -1,12 +1,26 @@
-let NV_ALLOW_LOG_ARIA_WARN = false;
+interface AccessibilityInfo {
+  [key:string]:any
+}
+interface Element {
+  ARIA_ATTRIBUTE_LIST:string[],
+  ARIA_PROERTY_LIST:string[],
+  get accessibilityNode():AccessibilityInfo
+  set accessibilityNode(info:AccessibilityInfo)
+  [key:PropertyKey|symbol]:any,
+}
+interface PropertyDescriptor {
+  [key:PropertyKey|symbol]:any
+}
+
+let NV_ALLOW_LOG_ARIA_WARN:boolean = false;
 class CaseTranslator {
-  static isKebabCase = (str = "") => /^[a-zA-Z](?:[a-zA-Z0-9]+)?(\-[a-zA-Z](?:[a-zA-Z0-9]+))+?$/.test(str);
-  static isSnakeCase = (str = "") => /^[a-zA-Z](?:[a-zA-Z0-9]+)?(\_[a-zA-Z](?:[a-zA-Z0-9]+))+?$/.test(str);
-  static isUpperSnakeCase = (str="") => /^[A-Z](?:[A-Z0-9]+)?(\_[A-Z](?:[A-Z0-9]+))+?$/.test(str);
-  static isUpperKebabCase = (str="") => /^[A-Z](?:[A-Z0-9]+)?(\-[A-Z](?:[A-Z0-9]+))+?$/.test(str);
-  static isPascalCase = (str = "") => /^[A-Z][a-z0-9]+?([A-Z][a-zA-Z0-9]+)+$/.test(str);
-  static isCamelCase = (str = "") => /^[a-z][a-z0-9]+?([A-Z][a-zA-Z0-9]+)+$/.test(str);
-  static isCaseTypeOf (str) {
+  static isKebabCase = (str:string = ""):boolean => /^[a-zA-Z](?:[a-zA-Z0-9]+)?(\-[a-zA-Z](?:[a-zA-Z0-9]+))+?$/.test(str);
+  static isSnakeCase = (str:string = ""):boolean => /^[a-zA-Z](?:[a-zA-Z0-9]+)?(\_[a-zA-Z](?:[a-zA-Z0-9]+))+?$/.test(str);
+  static isUpperSnakeCase = (str:string = ""):boolean => /^[A-Z](?:[A-Z0-9]+)?(\_[A-Z](?:[A-Z0-9]+))+?$/.test(str);
+  static isUpperKebabCase = (str:string = ""):boolean => /^[A-Z](?:[A-Z0-9]+)?(\-[A-Z](?:[A-Z0-9]+))+?$/.test(str);
+  static isPascalCase = (str:string = ""):boolean => /^[A-Z][a-z0-9]+?([A-Z][a-zA-Z0-9]+)+$/.test(str);
+  static isCamelCase = (str:string = ""):boolean => /^[a-z][a-z0-9]+?([A-Z][a-zA-Z0-9]+)+$/.test(str);
+  static isCaseTypeOf (str:string = "") {
     if ( this.isCamelCase(str) ) {
       return "camel";
     } else if ( this.isPascalCase(str) ) {
@@ -16,7 +30,7 @@ class CaseTranslator {
     } else if ( this.isSnakeCase(str) && !this.isUpperSnakeCase(str) ) {
       return "snake";
     } else if (this.isUpperKebabCase(str)) {
-      return "kebob-upper";
+      return "kebab-upper";
     } else if (this.isUpperSnakeCase(str)) {
       return "snake_upper";
     }
@@ -25,7 +39,7 @@ class CaseTranslator {
     }
   }
 
-  static toSnakeCase ( str ) {
+  static toSnakeCase ( str:string ) {
     if(str) {
       switch(this.isCaseTypeOf(str)) {
         case "NoC":
@@ -44,7 +58,7 @@ class CaseTranslator {
       }
     }
   }
-  static toKebabCase ( str ) {
+  static toKebabCase ( str:string ) {
     if(str) {
       switch(this.isCaseTypeOf(str)) {
         case "NoC":
@@ -63,7 +77,7 @@ class CaseTranslator {
       }
     }
   }
-  static toPascalCase ( str ) {
+  static toPascalCase ( str:string ) {
     if(str) {
       switch(this.isCaseTypeOf(str)) {
         case "NoC":
@@ -83,7 +97,7 @@ class CaseTranslator {
       }
     }
   }
-  static toCamelCase ( str ) {
+  static toCamelCase ( str:string ):string|undefined|null {
     if(str) {
       switch(this.isCaseTypeOf(str)) {
         case "NoC":
@@ -96,7 +110,7 @@ class CaseTranslator {
           return this.kebabToCamel(str);
         case "snake_upper":
           return this.snakeToCamel(str.toLowerCase());
-        case "kebob-upper":
+        case "kebab-upper":
           return this.kebabToCamel(str.toLowerCase());
         case "camel":
           return str;
@@ -104,14 +118,16 @@ class CaseTranslator {
     }
   }
 
-  static kebabToCamel = (str="is-test")=>{
+  static kebabToCamel = (str:string="is-test") : string|null|undefined =>{
     if (str && this.isKebabCase(str)) { 
-      let result = str;
+      let result:string = str;
       while( result.indexOf("-") >= 0 ) {
           result = result.replace(
             /(?![a-z]+(?=-))[a-z]+/,
-          /(?![a-z]+(?=-))[a-z]+/.exec(result)[0]
-          ).replace(/(?![a-z]+(?=-))[a-z]/,/(?![a-z]+(?=-))[a-z]/.exec(result)[0].toUpperCase()).replace('-','')
+          /(?![a-z]+(?=-))[a-z]+/.exec(result)![0]
+          ).replace(/(?![a-z]+(?=-))[a-z]/,
+          /(?![a-z]+(?=-))[a-z]/.exec(result)![0]
+          .toUpperCase()).replace('-','')
       }
       result = result.replace(/^[A-Z]/,result[0].toLowerCase())
       return result;
@@ -134,9 +150,9 @@ class CaseTranslator {
     }
   }
 
-  static camelToPascal = (str="isTest")=>{
+  static camelToPascal = (str:string="isTest")=>{
     if (str && this.isCamelCase(str) ) {
-      const result = [...str];
+      const result = [...str.split('')];
       const upperFirst = result[0].toUpperCase();
       result[0] = upperFirst;
       return result.join('');
@@ -144,97 +160,99 @@ class CaseTranslator {
   }
   static pascalToCamel = (str="IsTest")=>{
     if (str && this.isPascalCase(str) ) {
-      const result = [...str];
+      const result = [...str.split("")];
       const lowerFirst = result[0].toLowerCase();
       result[0] = lowerFirst;
       return result.join('');
     }
   }
   static camelToKebab = (str = "isTest")=>{
-    if (str && this.isCamelCase(str) ) { 
-      const source = /[a-z0-9]?(?=[A-Z])/.exec(str);
+    if (str && this.isCamelCase(str) ) {  
+      const source = /[a-z0-9]?(?=[A-Z])/.exec(str)!;
       const index = source.index ? source.index+1 : 0;
       const catchedPrefix = str.slice(0,index);
       return str.replace(catchedPrefix,catchedPrefix+"-").toLowerCase();
     }
   }
-  static camelToSnake = (str="isTest")=>{
+  static camelToSnake = (str:string="isTest"):string|undefined=>{
     if (str && this.isCamelCase(str)) {
-      return this.camelToKebab(str).replace(/\-/g,"_");
+      return this.camelToKebab(str)!.replace(/\-/g,"_");
     }
   }
-  static pascalToKebab = (str="IsTest") => {
+  static pascalToKebab = (str:string="IsTest"):string|undefined => {
     if (str && this.isPascalCase(str) ) {
       return this.camelToKebab(this.pascalToCamel(str));
     }
   }
-  static pascalToSnake = (str="IsTest") => {
+  static pascalToSnake = (str:string = "IsTest"):string|undefined => {
     if (str && this.isPascalCase(str) ) {
       return this.camelToSnake(this.pascalToCamel(str))
     }
   }
-  static kebabToPascal = (str = "is-test") =>{
+  static kebabToPascal = (str:string = "is-test"):string|undefined =>{
     if (str && this.isKebabCase(str)) {
-      return this.camelToPascal(this.kebabToCamel(str));
+      return this.camelToPascal(this.kebabToCamel(str)!);
     }
   }
   static snakeToPascal = (str="is_test") => {
     if ( str && this.isSnakeCase(str) ) {
-      return this.camelToPascal(this.snakeToCamel(str));
+      return this.camelToPascal(this.snakeToCamel(str)!);
     }
   }
 };
 
 // Event
 
-class AriaValueChangeEvent extends CustomEvent {
-  constructor(changedAria,postTarget){
-    super('ariaValueChange');
+class AriaValueChangeEvent<T=any> extends CustomEvent<T> {
+  name:string
+  value:boolean|string|null|undefined|number
+  constructor(changedAria:any,postTarget:Element){
+    super("ariaValueChange",{});
     this.name = changedAria;
     this.value = postTarget[changedAria];
   }
 };
 
 (()=>{
-  const ElementProto = Element.prototype;  
+  const ElementProto:Element = Element.prototype;  
   /** 
     *  @param {Object} O any object
     *  @param {PropertyKey} PropName
     *  @param {PropertyDescriptor} PropDescriptor
     *  @returns {Void}
    */
-  const defineProp = (O,PropName,PropDescriptor)=>{Object.defineProperty(O,PropName,PropDescriptor)};
+  const defineProp = (O:object,PropName:PropertyKey,PropDescriptor:PropertyDescriptor):void =>{Object.defineProperty(O,PropName,PropDescriptor)};
 
   /** 
   * @param {Object} O any object
   * @returns {string[]}
   */
-  const getPropNamesFrom = ( O ) => {return Object.keys(O)};
+  const getPropNamesFrom = ( O:object ): string[] => {return Object.keys(O)};
   /** 
   * @param {Object} O any object
   * @returns {any[]}
   */
-  const getPropValuesFrom = ( O ) => {return Object.values(O)};
+  const getPropValuesFrom = ( O:object ): any[] => {return Object.values(O)};
   /**
    * @param {Object} O any object
    * @param {string} propName
    * @returns {boolean}
   */
-  const isPropertyOf = ( O, propName )=>{
+  const isPropertyOf = ( O: object, propName: string ): boolean=>{
     return Object.prototype.hasOwnProperty.call(O,propName);
   }
 
-  const Reflectable = ['ariaAtomic', 'ariaAutoComplete', 'ariaBusy', 'ariaChecked', 'ariaColCount', 'ariaColIndex', 'ariaColSpan', 'ariaCurrent', 'ariaDescription', 'ariaDisabled', 'ariaExpanded', 'ariaHasPopup', 'ariaHidden', 'ariaKeyShortcuts', 'ariaLabel', 'ariaLevel', 'ariaLive', 'ariaModal', 'ariaMultiLine', 'ariaMultiSelectable', 'ariaOrientation', 'ariaPlaceholder', 'ariaPosInSet', 'ariaPressed', 'ariaReadOnly', 'ariaRelevant', 'ariaRequired', 'ariaRoleDescription', 'ariaRowCount', 'ariaRowIndex', 'ariaRowSpan', 'ariaSelected', 'ariaSetSize', 'ariaSort', 'ariaValueMax', 'ariaValueMin', 'ariaValueNow', 'ariaValueText']
-  const Reflected = ['aria-atomic', 'aria-autocomplete', 'aria-busy', 'aria-checked', 'aria-colcount', 'aria-colindex', 'aria-colspan', 'aria-current', 'aria-description', 'aria-disabled', 'aria-expanded', 'aria-haspopup', 'aria-hidden', 'aria-keyshortcuts', 'aria-label', 'aria-level', 'aria-live', 'aria-modal', 'aria-multiline', 'aria-multiselectable', 'aria-orientation', 'aria-placeholder', 'aria-posinset', 'aria-pressed', 'aria-readonly', 'aria-relevant', 'aria-required', 'aria-roledescription', 'aria-rowcount', 'aria-rowindex', 'aria-rowspan', 'aria-selected', 'aria-setsize', 'aria-sort', 'aria-valuemax', 'aria-valuemin', 'aria-valuenow', 'aria-valuetext']
+  const Reflectable : string[] = ['ariaAtomic', 'ariaAutoComplete', 'ariaBusy', 'ariaChecked', 'ariaColCount', 'ariaColIndex', 'ariaColSpan', 'ariaCurrent', 'ariaDescription', 'ariaDisabled', 'ariaExpanded', 'ariaHasPopup', 'ariaHidden', 'ariaKeyShortcuts', 'ariaLabel', 'ariaLevel', 'ariaLive', 'ariaModal', 'ariaMultiLine', 'ariaMultiSelectable', 'ariaOrientation', 'ariaPlaceholder', 'ariaPosInSet', 'ariaPressed', 'ariaReadOnly', 'ariaRelevant', 'ariaRequired', 'ariaRoleDescription', 'ariaRowCount', 'ariaRowIndex', 'ariaRowSpan', 'ariaSelected', 'ariaSetSize', 'ariaSort', 'ariaValueMax', 'ariaValueMin', 'ariaValueNow', 'ariaValueText']
+  const Reflected : string[] = ['aria-atomic', 'aria-autocomplete', 'aria-busy', 'aria-checked', 'aria-colcount', 'aria-colindex', 'aria-colspan', 'aria-current', 'aria-description', 'aria-disabled', 'aria-expanded', 'aria-haspopup', 'aria-hidden', 'aria-keyshortcuts', 'aria-label', 'aria-level', 'aria-live', 'aria-modal', 'aria-multiline', 'aria-multiselectable', 'aria-orientation', 'aria-placeholder', 'aria-posinset', 'aria-pressed', 'aria-readonly', 'aria-relevant', 'aria-required', 'aria-roledescription', 'aria-rowcount', 'aria-rowindex', 'aria-rowspan', 'aria-selected', 'aria-setsize', 'aria-sort', 'aria-valuemax', 'aria-valuemin', 'aria-valuenow', 'aria-valuetext']
 
   if(getPropNamesFrom(ElementProto).filter(el=> Reflectable.indexOf(el) > -1).length > 0 && !NV_ALLOW_LOG_ARIA_WARN ) {
     console.warn("[ARIA_REFLECTION_WARNING]\nBrowser that support an ARIA Reflection API detected! Original native properties that have the same name will be overwritten for implementation of extension!\n\nIf you want not to see this warning log, you can hide this by setting value of NV_ALLOW_LOG_ARIA_WARN to true from the global scope or deleting a line no. 6 of the ARIA Reflection script file.");
   }
 
-  const IsNumber = v=>/^-?\d+(\.\d+(e\+\d+)?)?$/.test((v));
-  const IsBool = v=>/^(true|false)$/.test(v);
-  const IsNull = v=>/^null$/.test(v);
-  const IsUndefined = v=>/^undefined$/.test(v);
+  const IsNumber = (v:string)=>/^-?\d+(\.\d+(e\+\d+)?)?$/.test((v));
+  const IsBool = (v:string)=>/^(true|false)$/.test(v);
+  const IsNull = (v:string)=>/^null$/.test(v);
+  const IsUndefined = (v:string)=>/^undefined$/.test(v);
 
   defineProp(ElementProto,Symbol.for("Is_AriaReflectionAPI_Available"),{
     get() {
@@ -244,7 +262,9 @@ class AriaValueChangeEvent extends CustomEvent {
 
 
   (()=>{
-    SupportedAriaDictionary = {};
+    const SupportedAriaDictionary: {[key:string]:any} = {
+
+    };
     Reflectable.forEach((el,idx)=>{
       SupportedAriaDictionary[el] = Reflected[idx];
     });
@@ -325,7 +345,7 @@ class AriaValueChangeEvent extends CustomEvent {
     if (!isPropertyOf(ElementProto,"tabIndex")) {
       defineProp(ElementProto,'tabIndex',{
         get (  ) {
-          tabIndex = this.getAttribute('tabindex');
+          let tabIndex:string|null = this.getAttribute('tabindex');
           if ( /^(button|input|textarea|summary|select|video|audio|iframe|embed|a)$/.test(this.tagName) ) {
             return 0;
           } else {
@@ -364,8 +384,8 @@ class AriaValueChangeEvent extends CustomEvent {
             constructor () {}
           }
           const info = new AccessibilityInfo();
-          this.ARIA_PROPERTY_LIST.forEach((el,idx)=>{            
-            _this = this;
+          this.ARIA_PROPERTY_LIST.forEach((el:string,idx:number)=>{            
+            const _this = this;
             defineProp(info,el,{
               get () {
                 const val = _this[el];;
@@ -387,14 +407,14 @@ class AriaValueChangeEvent extends CustomEvent {
           });
           return info;
         },
-        set(AriaProps){
+        set(AriaProps:{[key:string]:any}){
           if( typeof AriaProps === "object" ){
             for(let key in AriaProps) {
               if (key in this) {
                 this[key] = AriaProps[key];
               } else if ( this.ARIA_ATTRIBUTE_LIST.indexOf(key) > -1 ) {
-                AriaProps[CaseTranslator.kebabToCamel(key)] = AriaProps[key];
-                this[CaseTranslator.kebabToCamel(key)] = AriaProps[key];
+                AriaProps[CaseTranslator.kebabToCamel(key)!] = AriaProps[key];
+                this[CaseTranslator.kebabToCamel(key)!] = AriaProps[key];
                 delete AriaProps[key];
               }
             }
@@ -508,9 +528,10 @@ class AriaValueChangeEvent extends CustomEvent {
   const ObserveAttr = new MutationObserver( (m)=>{
     m.forEach((m)=>{
       const attr = m.attributeName;
-      if (m.target.ARIA_ATTRIBUTE_LIST.indexOf(attr) > -1) {
-        const _attr = CaseTranslator.isKebabCase(attr) ? CaseTranslator.kebabToCamel(attr) : attr;
-        m.target.dispatchEvent(new AriaValueChangeEvent(_attr,m.target));
+      const target = m.target as Element;
+      if (target.ARIA_ATTRIBUTE_LIST.indexOf(attr!) > -1) {
+        const _attr = CaseTranslator.isKebabCase(attr!) ? CaseTranslator.kebabToCamel(attr!) : attr;
+        target.dispatchEvent(new AriaValueChangeEvent(_attr,target));
       }
     })
   })

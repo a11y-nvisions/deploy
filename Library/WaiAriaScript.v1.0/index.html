@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARIA-TEST</title>
+  <style>
+    .collapsed {
+      display: none;
+    }
+
+    simple-tablist{
+      display: flex;
+      align-items: center;
+      justify-content:stretch;
+    }
+    simple-tablist>simple-tab{
+      display: block;
+      width: fit-content;
+      padding: 0 1em;
+    }
+    .overflower {
+      position: relative;
+      overflow: hidden;
+      border:solid 0.1em;
+    }
+    .overflower.expanded {
+      max-height:auto;
+    }
+    .overflower:not(.expanded){
+      max-height: 4.5em;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <span id="disclosure" aria-controls="hello">Testing1</span>
+  </div>
+  <div id="hello" class="collapsed">
+    <p>Hello World!</p>
+    <div>
+      <span id="pressButton">Testing2</span>
+    </div>
+  </div>
+  <button id="btnControlOverflow" aria-controls="overflower">Expand Oveflow</button>
+  <!-- <div class="overflower" id="overflower">
+    <p><a href="#">test1</a></p>
+    <p><a href="#">test2</a></p>
+    <p><a href="#">test3</a></p>
+    <p><a href="#">test4</a></p>
+    <p><a href="#">test5</a></p>
+    <p><a href="#">test6</a></p>
+    <p><a href="#">test7</a></p>
+    <p><a href="#">test8</a></p>
+    <p><a href="#">test9</a></p>
+    <p><a href="#">test10</a></p>
+    <p><a href="#">test11</a></p>
+    <p><a href="#">test12</a></p>
+    <p><a href="#">test13</a></p>
+    <p><a href="#">test14</a></p>
+    <p><a href="#">test15</a></p>
+    <p><a href="#">test16</a></p>
+    <p><a href="#">test17</a></p>
+    <p><a href="#">test18</a></p>
+    <p><a href="#">test19</a></p>
+    <p><a href="#">test20</a></p>
+  </div> -->
+  <script src="./WaiAriaScript.v1.0.js"></script>
+  <script>
+    const disclosure = document.querySelector('#disclosure');
+    const pressButton = document.querySelector('#pressButton');
+    function eventHandler (/**@type {Event|MouseEvent|KeyboardEvent}*/evt) {
+      const t=evt.target;
+      if(!t.ariaDisabled){
+        if(evt.type === "click"){
+          if (t.ariaExpanded !== null) {
+            t.ariaExpanded = !t.ariaExpanded;
+          }
+          if (t.ariaPressed !== null) {
+            t.ariaPressed = !t.ariaPressed;
+          }
+        }
+        if (evt.type === "keydown") {
+          switch(evt.code){
+            case "Enter":
+            case "Space":
+              t.click();
+              break;
+          }
+        }
+      }
+    }
+    disclosure.addEventListener('ariaValueChange',function( evt ){
+      const content = evt.target.ariaControls;
+      if(content) {
+        if(evt.name ==="ariaExpanded"){
+          content.classList.toggle("collapsed",!evt.value);
+        }
+      }
+    });
+    disclosure.addEventListener('click',eventHandler)
+    disclosure.addEventListener('keydown',eventHandler)
+    pressButton.addEventListener('click',eventHandler)
+    pressButton.addEventListener('keydown',eventHandler)
+    disclosure.accessibilityInfo = {
+      "aria-expanded":false,
+      role:"button",
+      tabIndex:0,
+    };
+    pressButton.accessibilityInfo = {
+      ariaPressed:false,
+      role:"button",
+      tabIndex:0
+    };
+    /* const overflowControl = document.querySelector('#btnControlOverflow')
+    const overflower = document.querySelector('.overflower');
+    setOverflowHiddenEvent(overflower);
+    overflowControl.accessibilityInfo = {
+      "aria-expanded":false
+    }
+    setOverflowHiddenEvent(document.body);
+    
+    const overflowerChild = [...overflower.querySelectorAll(':scope>*')];
+    overflowerChild.forEach(el=>{
+      el.addEventListener('whenHiddenOverflowed',(evt)=>{
+        const link = el.querySelector('a');
+        if(link){
+          if(evt.isHidden){
+            link.tabIndex = -1;
+          } else {
+            link.tabIndex = 0;
+          }
+        }
+      })
+    })
+    overflowControl.addEventListener('click',eventHandler)
+    overflowControl.addEventListener('ariaValueChange',function( evt ){
+      const content = evt.target.ariaControls;
+      if(content) {
+        content.classList.toggle("expanded",evt.value)
+      }
+    }); */
+  </script>
+</body>
+</html>
